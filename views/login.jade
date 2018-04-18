@@ -1,0 +1,14 @@
+extends layout
+
+block content
+  h2 登录
+  if error
+    div error
+  form(action='/login',method="post")
+    label 用户名：
+    input(type='text',name="name")
+    br
+    label 密码：
+    input(type='text',name="pwd")
+    br
+    button 登录
