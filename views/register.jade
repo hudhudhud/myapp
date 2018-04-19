@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h2 注册
+  if err
+    p.err=err
+  if msg
+    p.msg=msg
+  form(action='/register',method="post")
+    label 用户名：
+    input(type='text',name="name")
+    br
+    label 密码：
+    input(type='password',name="pwd")
+    br
+    label 生日:
+    input(type='datetime',name="birth")
+    br
+    button 注册

@@ -2,8 +2,10 @@ extends layout
 
 block content
   h2 登录
-  if error
-    div error
+  if err
+    p.err=err
+  if msg
+    p.msg=msg
   form(action='/login',method="post")
     label 用户名：
     input(type='text',name="name")

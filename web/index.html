@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>index</title>
+	<script type="text/javascript" src="./static/js/vue.js"></script>
+	<script type="text/javascript" src="./static/js/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+   		用户名：<input type="text" name="name" v-model="name"><br>
+   		密码：<input type="password" name="pwd" v-model="pwd"><br>
+   		<input type="button" value="登录" v-on:click="submit">
+   </form>
+</div>
+</body>
+<script type="text/javascript">
+  var app=new Vue({
+    el:"#app",
+    data:{
+     	name:"",
+     	pwd:""
+    },
+    methods:{
+    	submit(){
+    		console.log(this.name,this.pwd)
+    		axios.post('http://localhost:8080/login', {
+			    name: this.name,
+			    pwd: this.pwd
+			  })
+			  .then(function (response) {
+			    console.log(response.data);
+			  })
+			  .catch(function (error) {
+			    console.log(error);
+			  });
+    	}
+    }
+
+  })
+</script>
+</html>
