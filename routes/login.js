@@ -8,7 +8,7 @@ router.get('/',function(req, res, next) {
 	res.render('login');
 })
 
-router.post('/', async function(req, res, next) {
+router.post('/', (async function(req, res, next){
 	var obj={name:req.body.name,pwd:req.body.pwd}
 	var md5 = crypto.createHash('md5');   //crypto模块功能是加密并生成各种散列,此处所示为MD5方式加密
     obj.pwd= md5.update(obj.pwd).digest('hex');//加密后的密码
@@ -39,6 +39,6 @@ router.post('/', async function(req, res, next) {
 		//res.render('login',{e});
 		console.log(e)
 	}
-});
+}));
 
 module.exports = router;
