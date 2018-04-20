@@ -12,28 +12,28 @@ router.post('/', async function(req, res, next) {
 	var obj={name:req.body.name,pwd:req.body.pwd}
 	var md5 = crypto.createHash('md5');   //crypto模块功能是加密并生成各种散列,此处所示为MD5方式加密
     obj.pwd= md5.update(obj.pwd).digest('hex');//加密后的密码
-    var msg=""
+    var msg="",err=""
 	try{
-		var data=await user_bus.findOne(obj)
-		if(data){
+		var user=await user_bus.findOne(obj)
+		if(user){
 			//res.render('login',{msg:"登录成功"});
-			console.log("登录成功:"+data)
+			console.log("登录成功:"+user)
 			msg="登录成功"
 		}
 		else{
-			var data=await user_bus.findByName(req.body.name)
-			if(data){
+			var user=await user_bus.findByName(req.body.name)
+			if(user){
 				//res.render('login',{err:"密码错误"});
 				console.log("密码错误")
-				msg="密码错误"
+				err="密码错误"
 			}
 			else{
 				//res.render('login',{err:"账号不存在"});
 				console.log("账号不存在")
-				msg="账号不存在"
+				err="账号不存在"
 			}
 		}
-		res.json({data,msg})
+		res.json({user,msg,err})
 	}
 	catch(e){
 		//res.render('login',{e});

@@ -18,8 +18,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'web')));
+app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:8000');
@@ -36,7 +36,10 @@ app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 
 
-
+//默认跳到首页
+app.get('/',function(req,res) {
+	 res.redirect(302, '/index.html') //相对当前url的根
+})
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

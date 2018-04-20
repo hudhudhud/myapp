@@ -4,12 +4,25 @@
 	<title>index</title>
 	<script type="text/javascript" src="./static/js/vue.js"></script>
 	<script type="text/javascript" src="./static/js/axios.min.js"></script>
+	<style>
+		.msg{
+			color: blue
+		}
+		.err{
+			color:red;
+		}
+	</style>
 </head>
 <body>
+	<p>我是vue页面</p>
 <div id="app">
+		<p v-if="msg">欢迎{{name}},您已在网站{{day}}天！</p>
    		用户名：<input type="text" name="name" v-model="name"><br>
    		密码：<input type="password" name="pwd" v-model="pwd"><br>
    		<input type="button" value="登录" v-on:click="submit">
+
+   		<p  v-if="msg" class="msg">{{msg}}</p>
+   		<p  v-if="err" class="err">{{err}}</p>
    </form>
 </div>
 </body>
@@ -18,17 +31,25 @@
     el:"#app",
     data:{
      	name:"",
-     	pwd:""
+     	pwd:"",
+     	msg:"",
+     	err:"",
+     	day:0
     },
     methods:{
     	submit(){
     		console.log(this.name,this.pwd)
-    		axios.post('http://localhost:8080/login', {
+    		axios.post('/login', {
 			    name: this.name,
-			    pwd: this.pwd
+			    pwd: this.pwd,
 			  })
-			  .then(function (response) {
-			    console.log(response.data);
+			  .then((response)=>{
+			  	if(response.data){
+			  		this.msg=response.data.msg
+			  		this.err=response.data.err
+			  		this.day=Math.ceil((Date.now()-Date.parse(response.data.user.regidate))/3600/24/1000)
+			  	}
+			    console.log(response.data)
 			  })
 			  .catch(function (error) {
 			    console.log(error);
