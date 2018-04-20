@@ -16,7 +16,7 @@
 <body>
 	<p>我是vue页面</p>
 <div id="app">
-		<p v-if="msg">欢迎{{name}},您已在网站{{day}}天！</p>
+		<p v-show="msg">欢迎{{name}},在网站的第{{day}}天！</p>
    		用户名：<input type="text" name="name" v-model="name"><br>
    		密码：<input type="password" name="pwd" v-model="pwd"><br>
    		<input type="button" value="登录" v-on:click="submit">
@@ -47,7 +47,9 @@
 			  	if(response.data){
 			  		this.msg=response.data.msg
 			  		this.err=response.data.err
-			  		this.day=Math.ceil((Date.now()-Date.parse(response.data.user.regidate))/3600/24/1000)
+			  		if(response.data.user){
+			  			this.day=Math.ceil((Date.now()-Date.parse(response.data.user.regidate))/3600/24/1000)
+			  		}
 			  	}
 			    console.log(response.data)
 			  })
