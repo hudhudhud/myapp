@@ -16,11 +16,16 @@
 <body>
 	<p>我是vue页面</p>
 <div id="app">
-		<p v-show="msg">欢迎{{name}},在网站的第{{day}}天！</p>
-   		用户名：<input type="text" name="name" v-model="name"><br>
-   		密码：<input type="password" name="pwd" v-model="pwd"><br>
-   		<input type="button" value="登录" v-on:click="submit">
 
+		<p v-if="isLogin">
+			<span>欢迎{{name}},在网站的第{{day}}天！</span>
+			<span @click="loginout">退出</span>
+		</p>
+		<p v-else>
+		 	用户名：<input type="text" name="name" v-model="name"><br>
+	   		密码：<input type="password" name="pwd" v-model="pwd"><br>
+	   		<input type="button" value="登录" @click="submit">
+		</p>
    		<p  v-if="msg" class="msg">{{msg}}</p>
    		<p  v-if="err" class="err">{{err}}</p>
    </form>
@@ -34,28 +39,45 @@
      	pwd:"",
      	msg:"",
      	err:"",
-     	day:0
+     	day:0,
+     	isLogin:false,
+    },
+    created:function(){
+    	axios.get("/login").then(res=>{
+    		if(res.data.user){
+    			this.name=res.data.user.name
+    			this.day=Math.ceil((Date.now()-Date.parse(res.data.user.regidate))/3600/24/1000)
+    			this.isLogin=true
+    		}
+    	})
     },
     methods:{
     	submit(){
-    		console.log(this.name,this.pwd)
     		axios.post('/login', {
 			    name: this.name,
 			    pwd: this.pwd,
 			  })
-			  .then((response)=>{
-			  	if(response.data){
-			  		this.msg=response.data.msg
-			  		this.err=response.data.err
-			  		if(response.data.user){
-			  			this.day=Math.ceil((Date.now()-Date.parse(response.data.user.regidate))/3600/24/1000)
+			  .then((res)=>{
+			  	if(res.data){
+			  		this.msg=res.data.msg
+			  		this.err=res.data.err
+			  		if(res.data.user&&res.data.user.regidate){
+			  			this.day=Math.ceil((Date.now()-Date.parse(res.data.user.regidate))/3600/24/1000)
 			  		}
+			  		this.isLogin=!this.err
 			  	}
-			    console.log(response.data)
+			    console.log(res.data)
 			  })
 			  .catch(function (error) {
 			    console.log(error);
 			  });
+    	},
+    	loginout(){
+    		axios.get('/login/out').then(res=>{
+    			this.msg=res.msg
+    			this.isLogin=false
+    		})
+
     	}
     }
 
