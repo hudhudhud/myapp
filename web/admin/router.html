@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.fade-enter-active, .fade-leave-active {
+		  transition: opacity .5s ease;
+		}
+		.fade-enter, .fade-leave-active {
+		  opacity: 0
+		}
+		.child-view {
+		  position: absolute;
+		  transition: all .5s cubic-bezier(.55,0,.1,1);
+		}
+		.slide-left-enter, .slide-right-leave-active {
+		  opacity: 0;
+		  -webkit-transform: translate(30px, 0);
+		  transform: translate(30px, 0);
+		}
+		.slide-left-leave-active, .slide-right-enter {
+		  opacity: 0;
+		  -webkit-transform: translate(-30px, 0);
+		  transform: translate(-30px, 0);
+		}
+	</style>
+	<script type="text/javascript" src="../static/js/vue.js"></script>
+	<script type="text/javascript" src="../static/js/vue-router.js"></script>
+
+</head>
+<body>
+<section id="app">
+      <h1>后台管理</h1>
+      <ul>
+        <li><router-link to="/">首页</router-link></li>
+        <li><router-link to="/manage">管理</router-link></li>
+        <li><router-link to="/manage/article">文章管理</router-link></li>
+        <li><router-link to="/manage/user">用户管理</router-link></li>
+        <li><router-link to="/statistics">统计</router-link></li>
+        <li><router-link to="/statistics/user">用户分析</router-link></li>
+      </ul>
+      <transition name="fade" mode="out-in">
+        <router-view class="view"></router-view>
+      </transition>
+</section>
+<script>
+	// Vue.component('left-router', {
+	//   template: '<div>A custom component!</div>'
+	// })
+	var Home={template:`
+	<div class="home">
+      <h2>Home</h2>
+    </div>`}
+    var Content={
+    	data(){
+    		return {transitionName:'out-in'}
+    	},
+    	watch:{
+    		'$route'(to,from){
+    			this.transitionName=to.name<from.name?'slide-right':'slide-left'
+    		}
+    	},
+    	template:`
+			<div class="parent">
+				<h2>Content</h2>
+				<transition :name="transitionName">
+					<router-view class="child-view"></router-view>
+				</transition>
+			</div>
+    	`
+    }
+    var Content1={
+    	data(){
+    		return {transitionName:'out-in'}
+    	},
+    	watch:{
+    		'$route'(to,from){
+    			this.transitionName=to.name<from.name?'slide-right':'slide-left'
+    		}
+    	},
+    	template:`
+			<div class="parent">
+				<h2>Content</h2>
+				<transition :name="transitionName">
+					<router-view class="child-view"></router-view>
+				</transition>
+			</div>
+    	`
+    }
+	const ArticleManage = { template: '<div class="foo">文章管理</div>' }
+	const UserManage = { template: '<div class="bar">用户管理</div>' }
+	const UserSta = { template: '<div class="bar">用户分析</div>' }
+
+	const router=new VueRouter({
+		mode:'history',
+		base:"/admin/router.html",
+		routes:[
+		    { path: '/', component: Home },
+		    { path: '/manage', component: Content,
+		      children: [
+		        { path: '', component: ArticleManage,name:"1" },
+		        { path: 'article', component: ArticleManage,name:"1" },
+		        { path: 'user', component: UserManage,name:"2"}
+		      ]
+		    },
+		    { path: '/statistics', component: Content1,
+		      children: [
+		        { path: '', component: UserSta },
+		        { path: 'user', component: UserSta }
+		      ]
+		    }
+		],
+	})
+	new Vue({
+		router
+	}).$mount("#app")
+</script>
+</body>
+</html>

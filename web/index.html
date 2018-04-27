@@ -20,6 +20,7 @@
 		<p v-if="isLogin">
 			<span>欢迎{{name}},在网站的第{{day}}天！</span>
 			<span @click="loginout">退出</span>
+			
 		</p>
 		<p v-else>
 		 	用户名：<input type="text" name="name" v-model="name"><br>

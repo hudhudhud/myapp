@@ -33,14 +33,14 @@ app.use(express.static(path.join(__dirname, 'web')));
 app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
 //cors，资源共享
-// var allowCrossDomain = function(req, res, next) {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:8000');
-//     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type');
-//     res.header('Access-Control-Allow-Credentials','true');
-//     next();
-// };
-// app.use(allowCrossDomain);
+var allowCrossDomain = function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    res.header('Access-Control-Allow-Credentials','true');
+    next();
+};
+app.use(allowCrossDomain);
 
 
 app.use('/', indexRouter);
