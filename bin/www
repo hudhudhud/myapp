@@ -18,11 +18,11 @@ const credentials = {
   cert: fs.readFileSync('../cer/1_iamabj.club_bundle.crt')
 }
 
-var PORT = 9000 
+var PORT = 80 
 var SSLPORT = 443
 
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
+// var port = normalizePort(process.env.PORT || '3000');
+// app.set('port', port);
 
 /**
  * Create HTTP server.
