@@ -43,7 +43,7 @@ router.post('/', (async function(req, res, next){
 			//console.log(msg+user,user._id)
 			res.cookie("session_id", user._id, {
 		      signed: true,
-		      httpOnly: true,
+		      //httpOnly: true,
 		      expires: new Date(Date.now() + 3600000),//过期时间为1个小时
 		      domain: 'iamabj.club',
 		    })
