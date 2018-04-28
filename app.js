@@ -58,10 +58,10 @@ app.use(allowCrossDomain);
 
 // app.use('/', indexRouter);
 app.use('/login', function(req, res, next) {
-  if(req.host=="api.iamabj.club"){
+  if(req.hostname=="api.iamabj.club"){
      app.use('/api/login',loginRouter_api)
   }
-  else if(req.host=="m.iamabj.club"){
+  else if(req.hostname=="m.iamabj.club"){
     app.use('/login',loginRouter)
   }
   console.log("123333333",req.host)
