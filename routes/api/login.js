@@ -1,8 +1,8 @@
 var express = require('express');
 // const cookieParse = require('cookie-parser')
 var router = express.Router();
-var user_bus=require('../db/user_bus')
-var infoCode=require('../public/js/infoCode')
+var user_bus=require('../../db/user_bus')
+var infoCode=require('../../public/js/infoCode')
 var crypto = require('crypto')
 
 
@@ -32,7 +32,7 @@ router.get('/out', function(req, res, next) {
 })
 
 router.post('/', (async function(req, res, next){
-	console.log("web提交")
+	console.log("api提交")
 	var obj={name:req.body.name,pwd:req.body.pwd}
 	var md5 = crypto.createHash('md5');   //crypto模块功能是加密并生成各种散列,此处所示为MD5方式加密
     obj.pwd= md5.update(obj.pwd).digest('hex');//加密后的密码

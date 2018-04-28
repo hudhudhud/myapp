@@ -6,8 +6,11 @@ var session = require('express-session')
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var loginRouter = require('./routes/login');
 var registerRouter = require('./routes/register');
+
+
+var loginRouter = require('./routes/login');
+var loginRouter_api = require('./routes/api/login');
 
 var app = express();
 
@@ -43,7 +46,8 @@ app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
 //cors，资源共享
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
+    //res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -53,7 +57,16 @@ app.use(allowCrossDomain);
 
 
 // app.use('/', indexRouter);
-app.use('/login', loginRouter);
+app.use('/login', function(req, res, next) {
+  if(req.host=="api.iamabj.club"){
+     app.use('/api/login',loginRouter_api)
+  }
+  else if(req.host=="m.iamabj.club"){
+    app.use('/login',loginRouter)
+  }
+  console.log("123333333",req.host)
+});
+
 app.use('/register', registerRouter);
 
 
