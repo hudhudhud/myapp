@@ -45,7 +45,7 @@ router.post('/', (async function(req, res, next){
 		      signed: true,
 		      httpOnly: true,
 		      expires: new Date(Date.now() + 3600000),//过期时间为1个小时
-		      // domain: 'api.iamabj.club',
+		      domain: 'iamabj.club',
 		    })
 		    if(!req.session){
 		    	req.session={}

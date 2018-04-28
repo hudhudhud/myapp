@@ -27,8 +27,17 @@ app.use(session({
 }))
 
 
+//默认跳到首页
+// app.get('/',function(req,res) {
+//     if(req.protocol === 'https') {  
+//        res.redirect(302, '/index.html') //相对当前url的根
+//     }  
+//     else {  
+//        res.redirect(302, 'https://iamabj.club/index.html')
+//     }  
+// })
 
-//静态文件服务
+//静态文件服务//默认会去找index.html文件,若找不到，则到下一个static找，否则不处理
 app.use(express.static(path.join(__dirname, 'web')));
 app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
@@ -43,15 +52,12 @@ var allowCrossDomain = function(req, res, next) {
 app.use(allowCrossDomain);
 
 
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/register', registerRouter);
 
 
-//默认跳到首页
-app.get('/',function(req,res) {
-	res.redirect(302, '/index.html') //相对当前url的根
-})
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
