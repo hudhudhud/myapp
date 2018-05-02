@@ -2,7 +2,7 @@ var express = require('express');
 // const cookieParse = require('cookie-parser')
 var router = express.Router();
 var request=require('request')
-require('express-async-errors')
+//require('express-async-errors')
 var user_bus=require('../db/user_bus')
 var infoCode=require('../public/js/infoCode')
 var crypto = require('crypto')
@@ -95,39 +95,43 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 	}, 
 	async (err, response, data) => {
 	    if (response.statusCode === 200) {
-			    console.log("[openid]=",data, data.openid)
+			    console.log("[openid]=",data.openid)
 			    console.log("[session_key]=", data.session_key)
-
-			    //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
-			    //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
-		      	var msg="",err=""
-				try{
-					var user=await user_bus.findByWxcode(data.openid)
-					if(user){
-						msg=infoCode["S0001"]
+				var msg="",err=""
+			    if(data.openid&&data.session_key){
+				    //TODO: 生成一个唯一字符串sessionid作为键，将openid和session_key作为值，存入redis，超时时间设置为2小时
+				    //伪代码: redisStore.set(sessionid, openid + session_key, 7200)
+					try{
+						var user=await user_bus.findByWxcode(data.openid)
+						if(user){
+							msg=infoCode["S0001"]
+						}
+						else{
+							user=await user_bus.insert(Object.assign({name:userinfo.nickName,wxcode:data.openid},userinfo))
+						}
+						if(user){
+							if(!req.session){
+						    	req.session={}
+						    }
+						    if (!req.session.users) {
+						      req.session.users = {}
+						    }
+						    req.session.users[user._id] = user
+							res.json({msg,"session_id":user._id})
+							console.log("session_id",user,user._id)
+						}
+						else{
+							res.json({err:infoCode["F0003"]})
+						}
 					}
-					else{
-						user=await user_bus.insert(Object.assign({name:userinfo.nickName,wxcode:data.openid},userinfo))
-						if (!user) throw Error("添加微信用户失败")
+					catch(err){
+						res.json({err})
+						console.log(err)
 					}
-					if(user){
-						if(!req.session){
-					    	req.session={}
-					    }
-					    if (!req.session.users) {
-					      req.session.users = {}
-					    }
-					    req.session.users[user._id] = user
-						res.json({msg,err,session_id:user._id})
-					}
-					else{
-						res.json({err:"添加微信用户失败"})
-					}
-				}
-				catch(err){
-					res.json({err})
-					console.log(err)
-				}
+			    }
+			    else{
+			    	res.json({err:infoCode["F0004"]})
+			    }
 
 	    } else {
 	      console.log("[error]", err)
