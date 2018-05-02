@@ -19,8 +19,8 @@ router.get('/',function(req, res, next) {
 	}
 })
 router.get('/wx',function(req, res, next) {
-	console.log("11111111111",req.session.users,req.signedCookies,req.header("session_id"))
-	var user=req.session.users? req.session.users[req.header("session_id")] : null
+	console.log("11111111111",req.session.users,req.signedCookies)//,req.header("session_id")
+	var user=req.session.users? req.session.users[req.signedCookies.session_id] : null
 	if(user){
 		res.json({user:true})
 	}
