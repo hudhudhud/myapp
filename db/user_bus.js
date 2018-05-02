@@ -17,6 +17,10 @@ exports.findByName=function(name,show={}) {
      return User.findOne({name},show).exec()
 }
 
+exports.findByWxcode=function(wxcode,show={}) {
+     return User.findOne({wxcode},show).exec()
+}
+
 exports.findByIdAndUpdate=function(id,update){
     // var id = '56f2558b2dd74855a345edb2';
     // var updatestr = {'userpwd': 'abcd'};
