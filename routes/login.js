@@ -19,8 +19,8 @@ router.get('/',function(req, res, next) {
 	}
 })
 router.get('/wx',function(req, res, next) {
-	console.log("11111111111",req.session.users,req.signedCookies)//,req.header("session_id")
-	var user=req.session.users? req.session.users[req.signedCookies.session_id] : null
+	console.log("11111111111",req.session.users,req.signedCookies,req.header("session_id"))
+	var user=req.session.users? req.session.users[req.header("session_id")] : null
 	if(user){
 		res.json({user:true})
 	}
@@ -128,7 +128,7 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						    }
 						    req.session.users[user._id] = user
 							res.json({msg,"session_id":user._id})
-							console.log("session_id=",user._id,"req.ssession=",req.session)
+							console.log("session_id=",user._id,"req.session=",req.session)
 						}
 						else{
 							res.json({err:infoCode["F0003"]})
