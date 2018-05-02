@@ -128,7 +128,7 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						    }
 						    req.session.users[user._id] = user
 							res.json({msg,"session_id":user._id})
-							console.log("session_id",user,user._id)
+							console.log("session_id=",user._id,"req.ssession=",req.session)
 						}
 						else{
 							res.json({err:infoCode["F0003"]})
