@@ -7,19 +7,18 @@ var user_bus=require('../db/user_bus')
 var infoCode=require('../public/js/infoCode')
 var crypto = require('crypto')
 
-// var redis = require("redis"),
-//     client = redis.createClient()
+var redis = require("redis"),
+    client = redis.createClient()
 
-// client.on("error", function (err) {
-//     console.log("Error " + err);
-// });
+client.on("error", function (err) {
+    console.log("Error " + err);
+});
 
 router.get('/',function(req, res, next) {
 	try{
-		// var user=client.get(req.signedCookies.session_id)
-		// console.log("get from redis,",user)
+		
 		console.log("11111111111",req.session.users,req.signedCookies)
-		var user=req.session.users? req.session.users[req.signedCookies.session_id] : null
+		user=req.session.users? req.session.users[req.signedCookies.session_id] : null
 		if(user){
 			res.json({user:true})
 		}
@@ -33,8 +32,8 @@ router.get('/',function(req, res, next) {
 
 })
 router.get('/wx',function(req, res, next) {
-	console.log("11111111111",req.session.users,req.signedCookies,req.header("session_id"))
-	var user=req.session.users? req.session.users[req.header("session_id")] : null
+	var user=client.get(req.header("session_id"))
+	console.log("get from redis",req.header("session_id"),user)
 	if(user){
 		res.json({user:true})
 	}
@@ -81,7 +80,7 @@ router.post('/', (async function(req, res, next){
 		      req.session.users = {}
 		    }
 		    req.session.users[user._id] = user
-		    //client.set(user._id,user,60)
+		    client.set(user._id,user,60*60)
 		    console.log("登录",req.session.users)
 		}
 		else{
@@ -135,13 +134,14 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 							user=await user_bus.insert(Object.assign({name:userinfo.nickName,wxcode:data.openid},userinfo))
 						}
 						if(user){
-							if(!req.session){
-						    	req.session={}
-						    }
-						    if (!req.session.users) {
-						      req.session.users = {}
-						    }
-						    req.session.users[user._id] = user
+							// if(!req.session){
+						 //    	req.session={}
+						 //    }
+						 //    if (!req.session.users) {
+						 //      req.session.users = {}
+						 //    }
+						 //    req.session.users[user._id] = user
+						    client.set(user._id,user,60*60)
 							res.json({msg,"session_id":user._id})
 							console.log("session_id=",user._id,"req.session=",req.session)
 						}
