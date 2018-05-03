@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var logger = require('morgan');
+var RedisStore = require('connect-redis')(session);
+
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
@@ -22,12 +24,27 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser("hdhdhd"));
+// app.use(session({
+//   secret: 'hdhdhd',
+//   resave: false,
+//   saveUninitialized: true,
+//   expires: 60 * 60 * 1000, //过期时间1小时
+// }))
+
+
 app.use(session({
-  secret: 'hdhdhd',
-  resave: false,
-  saveUninitialized: true,
-  expires: 60 * 60 * 1000, //过期时间1小时
-}))
+    secret:'hdhdhd',
+    resave: false,
+    saveUninitialized: true,
+    expires: 60 * 60 * 1000, //过期时间1小时
+    store:new RedisStore({
+        host:'127.0.0.1',
+        port:'6379',
+        ttl: 60 * 60 * 1000,
+        //db:'mydb'  //此属性可选。redis可以进行分库操作。若无此参数，则不进行分库
+    })
+}));
+
 
 
 //默认跳到首页
@@ -81,6 +98,7 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  //res.send(err)
 	res.redirect(302, '/noPage.html') //相对当前url的根
 });
 

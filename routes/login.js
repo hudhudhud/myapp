@@ -7,16 +7,30 @@ var user_bus=require('../db/user_bus')
 var infoCode=require('../public/js/infoCode')
 var crypto = require('crypto')
 
+// var redis = require("redis"),
+//     client = redis.createClient()
+
+// client.on("error", function (err) {
+//     console.log("Error " + err);
+// });
 
 router.get('/',function(req, res, next) {
-	console.log("11111111111",req.session.users,req.signedCookies)
-	var user=req.session.users? req.session.users[req.signedCookies.session_id] : null
-	if(user){
-		res.json({user:true})
+	try{
+		// var user=client.get(req.signedCookies.session_id)
+		// console.log("get from redis,",user)
+		console.log("11111111111",req.session.users,req.signedCookies)
+		var user=req.session.users? req.session.users[req.signedCookies.session_id] : null
+		if(user){
+			res.json({user:true})
+		}
+		else{
+			res.json({})
+		}
 	}
-	else{
-		res.json({})
+	catch(e){
+		console.log(e)
 	}
+
 })
 router.get('/wx',function(req, res, next) {
 	console.log("11111111111",req.session.users,req.signedCookies,req.header("session_id"))
@@ -67,6 +81,7 @@ router.post('/', (async function(req, res, next){
 		      req.session.users = {}
 		    }
 		    req.session.users[user._id] = user
+		    //client.set(user._id,user,60)
 		    console.log("登录",req.session.users)
 		}
 		else{
