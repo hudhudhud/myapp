@@ -66,7 +66,6 @@ router.post('/', (async function(req, res, next){
 		var user=await user_bus.findOne(obj)
 		if(user){
 			msg=infoCode["S0001"]
-			//console.log(msg+user,user._id)
 			res.cookie("session_id", user._id, {
 		      signed: true,
 		      httpOnly: true,
@@ -79,8 +78,8 @@ router.post('/', (async function(req, res, next){
 		    if (!req.session.users) {
 		      req.session.users = {}
 		    }
-		    req.session.users[user._id] = user
-		    client.set(user._id,user,60*60)
+		    req.session.users[user._id] = true
+		    client.set(user._id,true,60*60)
 		    console.log("登录",req.session.users)
 		}
 		else{
@@ -141,7 +140,7 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						 //      req.session.users = {}
 						 //    }
 						 //    req.session.users[user._id] = user
-						    client.set(user._id,user,60*60)
+						    client.set(user._id,true,60*60)
 							res.json({msg,"session_id":user._id})
 							console.log("session_id=",user._id,"req.session=",req.session)
 						}
