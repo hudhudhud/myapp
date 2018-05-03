@@ -16,7 +16,6 @@ client.on("error", function (err) {
 
 router.get('/',function(req, res, next) {
 	try{
-		
 		console.log("11111111111",req.session.users,req.signedCookies)
 		user=req.session.users? req.session.users[req.signedCookies.session_id] : null
 		if(user){
@@ -32,8 +31,9 @@ router.get('/',function(req, res, next) {
 
 })
 router.get('/wx',function(req, res, next) {
-	var user=client.get(req.header("session_id"))
-	console.log("get from redis",req.header("session_id"),user)
+	var session_id=req.header("session_id")
+	var user=client.get(session_id)
+	console.log("get from redis",session_id,user)
 	if(user){
 		res.json({user:true})
 	}
@@ -44,7 +44,9 @@ router.get('/wx',function(req, res, next) {
 
 router.get('/out', function(req, res, next) {
 	try{
-		console.log("登出",req.session.users,req.signedCookies.session_id)
+		  var session_id=req.signedCookies.session_id
+		  client.del(session_id)
+		  console.log("登出",req.session.users,req.signedCookies.session_id)
 		  if (req.session.users && req.session.users[req.signedCookies.session_id]) {
 		    delete req.session.users[req.signedCookies.session_id]
 		  }
@@ -79,7 +81,7 @@ router.post('/', (async function(req, res, next){
 		      req.session.users = {}
 		    }
 		    req.session.users[user._id] = true
-		    client.set(user._id,true,60*60)
+		    client.set(user._id+'',true,60*60)
 		    console.log("登录",req.session.users)
 		}
 		else{
@@ -140,7 +142,7 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						 //      req.session.users = {}
 						 //    }
 						 //    req.session.users[user._id] = user
-						    client.set(user._id,true,60*60)
+						    client.set(user._id+'',true,60*60)
 							res.json({msg,"session_id":user._id})
 							console.log("session_id=",user._id,"req.session=",req.session)
 						}
