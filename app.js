@@ -9,10 +9,13 @@ var RedisStore = require('connect-redis')(session);
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
-
-
 var loginRouter = require('./routes/login');
-var loginRouter_api = require('./routes/api/login');
+//var loginRouter_api = require('./routes/api/login');
+
+
+var articleRouter = require('./routes/manage/article');
+var userRouter = require('./routes/manage/user');
+
 
 var app = express();
 
@@ -63,8 +66,8 @@ app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
 //cors，资源共享
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
-    //res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    //res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -84,11 +87,12 @@ app.use(allowCrossDomain);
 //   console.log("123333333",req.hostname)
 // });
 
- app.use('/login',loginRouter)
+app.use('/login',loginRouter)
 
 app.use('/register', registerRouter);
 
-
+app.use('/manage/article', articleRouter);
+app.use('/manage/user', userRouter);
 
 
 // catch 404 and forward to error handler
