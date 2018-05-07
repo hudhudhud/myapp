@@ -64,10 +64,11 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'web')));
 app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
+
 //cors，资源共享
 var allowCrossDomain = function(req, res, next) {
     //res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
-    res.header('Access-Control-Allow-Origin', 'http://localhost:8080');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8888');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -94,6 +95,28 @@ app.use('/register', registerRouter);
 app.use('/manage/article', articleRouter);
 app.use('/manage/user', userRouter);
 
+
+//上传图片begin
+var multer = require('multer')
+const storage = multer.diskStorage({
+  //上传图片的路径，是在你的静态目录下（public）uploads会自动进行创建
+    destination: './web/static/img/upload',
+  //给上传文件重命名，获取添加后缀名
+    filename: function(req, file, callback){
+         var fileFormat = (file.originalname).split(".");
+         callback(null, Date.now() + "." + fileFormat[fileFormat.length - 1]);
+    }
+})
+
+var upload = multer({storage})
+
+app.post('/upload', upload.single('imgimg'), function(req, res, next) {
+  console.log("file=",req.file)
+  console.log("body=",req.body)
+  res.json({name:req.file.filename})
+})
+
+//上传图片end
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
