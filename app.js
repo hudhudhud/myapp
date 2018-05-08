@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session')
 var logger = require('morgan');
 var RedisStore = require('connect-redis')(session);
-
+var mime = require('mime-types')
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
@@ -103,14 +103,15 @@ const storage = multer.diskStorage({
     destination: './web/static/img/upload',
   //给上传文件重命名，获取添加后缀名
     filename: function(req, file, callback){
-         var fileFormat = (file.originalname).split(".");
-         callback(null, Date.now() + "." + fileFormat[fileFormat.length - 1]);
+         var ext=mime.extension(file.mimetype)
+         //var fileFormat = (file.originalname).split(".");
+         callback(null, Date.now() + "." + ext);
     }
 })
 
 var upload = multer({storage})
 
-app.post('/upload', upload.single('imgimg'), function(req, res, next) {
+app.post('/upload', upload.single('artifile'), function(req, res, next) {
   console.log("file=",req.file)
   console.log("body=",req.body)
   res.json({name:req.file.filename})
