@@ -14,7 +14,8 @@ client.on("error", function (err) {
     console.log("Error " + err);
 });
 
-router.get('/',function(req, res, next) {
+
+router.get('/api',function(req, res, next) {
 	try{
 		console.log("11111111111",req.session.users,req.signedCookies)
 		user=req.session.users? req.session.users[req.signedCookies.session_id] : null
@@ -42,7 +43,7 @@ router.get('/wx',function(req, res, next) {
 	}
 })
 
-router.get('/out', function(req, res, next) {
+router.get('/api/out', function(req, res, next) {
 	try{
 		  var session_id=req.signedCookies.session_id
 		  client.del(session_id)
@@ -58,7 +59,7 @@ router.get('/out', function(req, res, next) {
 	}
 })
 
-router.post('/', (async function(req, res, next){
+router.post('/api', (async function(req, res, next){
 	console.log("web提交")
 	var obj={name:req.body.name,pwd:req.body.pwd}
 	var md5 = crypto.createHash('md5');   //crypto模块功能是加密并生成各种散列,此处所示为MD5方式加密

@@ -88,12 +88,13 @@ app.use(allowCrossDomain);
 //   console.log("123333333",req.hostname)
 // });
 
-app.use('/login',loginRouter)
+app.use('/admin/login',loginRouter)
 
 app.use('/register', registerRouter);
 
-app.use('/manage/article', articleRouter);
-app.use('/manage/user', userRouter);
+app.use('/admin/manage', articleRouter);
+app.use('/admin/manage/article', articleRouter);
+app.use('/admin/manage/user', userRouter);
 
 
 //上传图片begin
@@ -127,7 +128,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   //res.send(err)
-	res.redirect(302, '/noPage.html') //相对当前url的根
+	res.redirect(302, '/admin/index.html') //找不到页面就跳转到首页
 });
 
 module.exports = app;
