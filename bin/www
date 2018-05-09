@@ -8,14 +8,16 @@ var app = require('../app');
 var debug = require('debug')('myapp:server');
 var http = require('http');
 var https = require('https');
+const path =require("path")
 const fs = require("fs");
 /**
  * Get port from environment and store in Express.
  */
 
 const credentials = {
-  key: fs.readFileSync('./cer/2_iamabj.club.key'),
-  cert: fs.readFileSync('./cer/1_iamabj.club_bundle.crt')
+
+  key: fs.readFileSync(path.join(__dirname,'../cer/2_iamabj.club.key')),
+  cert: fs.readFileSync(path.join(__dirname,'../cer/1_iamabj.club_bundle.crt'))
 }
 
 var PORT = 80 
@@ -36,7 +38,6 @@ var httpsServer = https.createServer(credentials, app)
  */
 
 httpServer.listen(PORT, function() { 
-  
     console.log('HTTP Server is running on: http://localhost:%s', PORT);  
 });  
   
