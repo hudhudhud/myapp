@@ -101,7 +101,7 @@ app.use('/admin/manage/user', userRouter);
 var multer = require('multer')
 const storage = multer.diskStorage({
   //上传图片的路径，是在你的静态目录下（public）uploads会自动进行创建
-    destination: './web/static/img/upload',
+    destination: path.join(__dirname,'./web/static/img/upload'),
   //给上传文件重命名，获取添加后缀名
     filename: function(req, file, callback){
          var ext=mime.extension(file.mimetype)
