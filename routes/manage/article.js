@@ -17,6 +17,7 @@ router.post('/api/add',async function(req, res, next) {
 		coverImg:req.body.coverImg,
 		sliderImgs:JSON.parse(req.body.sliderImgs),
 		spec:JSON.parse(req.body.spec),
+		tags:JSON.parse(req.body.tags),
     	publishDate:req.body.publishDate,
 	}
 	

@@ -112,10 +112,14 @@ const storage = multer.diskStorage({
 
 var upload = multer({storage})
 
-app.post('/upload', upload.single('artifile'), function(req, res, next) {
-  console.log("file=",req.file)
-  console.log("body=",req.body)
-  res.json({name:req.file.filename})
+app.post('/upload', upload.array('artifile',8), function(req, res, next) {
+  var obj=[]
+  for (var i = 0; i <req.files.length; i++) {
+    console.log("file=",req.files[i])
+    obj.push({name:req.files[i].filename})
+  }
+  console.log(obj)
+  res.json({files:obj})
 })
 
 //上传图片end
