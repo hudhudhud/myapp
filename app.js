@@ -67,8 +67,8 @@ app.use('/img',express.static(path.join(__dirname, 'web/static/img')));
 
 //cors，资源共享
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
-    // res.header('Access-Control-Allow-Origin', 'http://localhost:8888');
+    // res.header('Access-Control-Allow-Origin', 'https://iamabj.club');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8888');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -105,6 +105,8 @@ const storage = multer.diskStorage({
   //给上传文件重命名，获取添加后缀名
     filename: function(req, file, callback){
          var ext=mime.extension(file.mimetype)
+         if(!ext)
+            ext="jpeg"
          //var fileFormat = (file.originalname).split(".");
          callback(null, Date.now() + "." + ext);
     }

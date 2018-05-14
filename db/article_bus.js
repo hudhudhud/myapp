@@ -13,6 +13,9 @@ exports.findOne=function(where,show={}) {
      return Article.findOne(where,show).exec()
 }
 
+exports.findById=function(id,show={}) {
+     return Article.findById(id).exec()
+}
 exports.findByName=function(name,show={}) {
      return Article.findOne({name},show).exec()
 }

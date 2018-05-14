@@ -9,6 +9,7 @@ var ArticleSchema = new Schema({
     coverImg:String,
     sliderImgs:[String],
     spec:[Schema.Types.Mixed],//{name:"番茄",val:"2kg"} or {name:"颜色",content:[{default:true,val:"红色",img:"a.jpg"},{val:"绿色",img:"b.jpg"}]}
+    tags:[Schema.Types.Mixed],
     createDate:{ type: Date, default: Date.now },
     modifyDate:Date,
     publishDate:Date,
