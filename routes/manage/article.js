@@ -42,7 +42,22 @@ router.post('/api/add',async function(req, res, next) {
 router.get('/api',async function(req, res, next) {
 	var err=""
 	try{
-		var data=await article_bus.find()
+		console.log(req.query)
+		var searchObj={},data
+		if(req.query){
+			if(req.query.catg&&req.query.catg>0){
+				searchObj.catg=req.query.catg
+			}
+			if(req.query.search){
+				searchObj.title=new RegExp(req.query.search,"gim")
+			}
+		}
+		if(Object.keys(searchObj).length>0){
+			 data=await article_bus.find(searchObj)
+		}
+		else{
+			data=await article_bus.find()
+		}
 		if(data){
 			res.json(data)
 		}
@@ -57,24 +72,6 @@ router.get('/api',async function(req, res, next) {
 
 })
 
-
-router.get('/api/catg/:catg',async function(req, res, next) {
-	var err=""
-	try{
-		var data=await article_bus.find({catg:req.params.catg})
-		if(data){
-			res.json(data)
-		}
-		else{
-			res.json({fail:"失败"})
-		}
-	}
-	catch(err){
-		res.json({err})
-		console.log(err)
-	}
-
-})
 
 
 router.get('/api/:id',async function(req, res, next) {
@@ -92,7 +89,6 @@ router.get('/api/:id',async function(req, res, next) {
 		res.json({err})
 		console.log(err)
 	}
-
 })
 
 
