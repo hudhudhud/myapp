@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
-    DB_URL = 'mongodb://localhost:27017/myapp';
-
+    DB_URL =
+     'mongodb://localhost:27017/myapp';
+// 'mongodb://root:Aa111111@localhost:27017/myapp';
 /**
  * 连接
  */

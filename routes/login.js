@@ -11,16 +11,17 @@ var redis = require("redis"),
     client = redis.createClient()
 
 client.on("error", function (err) {
-    console.log("Error " + err);
+    console.log("redis Error " + err);
 });
 
 
-router.get('/api',function(req, res, next) {
+router.get('/api',async function(req, res, next) {
 	try{
 		console.log("11111111111",req.session.users,req.signedCookies)
 		user=req.session.users? req.session.users[req.signedCookies.session_id] : null
 		if(user){
-			res.json({user:true})
+			console.log(user)
+			res.json({user:{name:user.name,id:user._id}})
 		}
 		else{
 			res.json({})
@@ -81,8 +82,8 @@ router.post('/api', (async function(req, res, next){
 		    if (!req.session.users) {
 		      req.session.users = {}
 		    }
-		    req.session.users[user._id] = true
-		    client.set(user._id+'',true,60*60)
+		    req.session.users[user._id] = user
+		    client.set(user._id+'',user,60*60)
 		    console.log("登录",req.session.users)
 		}
 		else{
@@ -143,7 +144,7 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						 //      req.session.users = {}
 						 //    }
 						 //    req.session.users[user._id] = user
-						    client.set(user._id+'',true,60*60)
+						    client.set(user._id+'',user,60*60)
 							res.json({msg,"session_id":user._id})
 							console.log("session_id=",user._id,"req.session=",req.session)
 						}
