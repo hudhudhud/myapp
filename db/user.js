@@ -11,10 +11,12 @@ var UserSchema = new Schema({
     province: {type: String}, 
     country: {type: String},    
     phone: {type:String},
-    avatarUrl:{type:String},              
-    logindate : { type: Date,default:Date.now},                  //最近登录时间
+    avatarUrl:{type:String}, 
+    tags:[Schema.Types.Mixed], //便签        
+    logindate : { type: Date,default:Date.now}, //最近登录时间
     regidate:{type:Date,default:Date.now},
     wxcode:{type:String},
+    origin:{type:String},//[{name:"微信授权用户",val:"1"},{name:"手机号注册用户",val:"2"},{name:"完善信息用户",val:"3"}],
 
 });
 

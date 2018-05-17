@@ -9,13 +9,12 @@ var mime = require('mime-types')
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
-var loginRouter = require('./routes/login');
+var loginRouter = require('./routes/login'); //admin
 //var loginRouter_api = require('./routes/api/login');
 
 
 var articleRouter = require('./routes/manage/article');
-var userRouter = require('./routes/manage/user');
-
+var userRouter = require('./routes/manage/user'); //wxuser
 
 var app = express();
 
@@ -95,7 +94,7 @@ app.use('/register', registerRouter);
 app.use('/admin/manage', articleRouter);
 app.use('/admin/manage/article', articleRouter);
 app.use('/admin/manage/user', userRouter);
-
+app.use('/admin/user', userRouter);
 
 //上传图片begin
 var multer = require('multer')
