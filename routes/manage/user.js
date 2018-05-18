@@ -34,8 +34,8 @@ router.get('/api',async function(req, res, next) {
 router.get('/api/list',async function(req, res, next) {
 	try{
 		var searchQuery={}
-		if(req.params.origin){
-			searchQuery.origin=req.params.origin
+		if(req.query.origin){
+			searchQuery.origin=req.query.origin
 		}
 		var users=await user_bus.find(searchQuery,{pwd:0,wxcode:0})
 		res.json({users})
