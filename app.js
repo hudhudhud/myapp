@@ -94,7 +94,7 @@ app.use('/register', registerRouter);
 app.use('/admin/manage', articleRouter);
 app.use('/admin/manage/article', articleRouter);
 app.use('/admin/manage/user', userRouter);
-app.use('/admin/user', userRouter);
+app.use('/user', userRouter);
 
 //上传图片begin
 var multer = require('multer')
