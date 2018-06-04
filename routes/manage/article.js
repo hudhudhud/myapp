@@ -168,8 +168,8 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 					}
 				}
 				else{
-					user.zanArtIds=[];
-					console.log(222222,user.zanArtIds)
+					user.zanArtIds=new Array();
+					console.log(222222,user,user.zanArtIds)
 					if(sta)user.zanArtIds.push(req.params.id)
 				}
 
