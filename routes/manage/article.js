@@ -155,7 +155,7 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 					}
 				}
 				else{
-					data.zanUserIds=[]
+					data.zanUserIds=[];
 					if(sta)data.zanUserIds.push(user._id)
 				}
 
@@ -168,7 +168,8 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 					}
 				}
 				else{
-					user.zanArtIds=[]
+					user.zanArtIds=[];
+					console.log(222222,user.zanArtIds)
 					if(sta)user.zanArtIds.push(req.params.id)
 				}
 
