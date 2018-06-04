@@ -12,7 +12,8 @@ var UserSchema = new Schema({
     country: {type: String},    
     phone: {type:String},
     avatarUrl:{type:String}, 
-    tags:[Schema.Types.Mixed], //便签        
+    tags:[Schema.Types.Mixed], //便签  
+    zanArtIds:[String],//赞的文章id数组      
     logindate : { type: Date,default:Date.now}, //最近登录时间
     regidate:{type:Date,default:Date.now},
     wxcode:{type:String},

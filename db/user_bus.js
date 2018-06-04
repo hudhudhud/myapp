@@ -12,7 +12,9 @@ exports.find=function(where,show={}) {
 exports.findOne=function(where,show={}) {
      return User.findOne(where,show).exec()
 }
-
+exports.findById=function(id,show={}) {
+     return User.findById(id).exec()
+}
 exports.findByName=function(name,show={}) {
      return User.findOne({name},show).exec()
 }
@@ -47,7 +49,7 @@ exports.update=function(where,update) {
     //         console.log("Res:" + res);
     //     }
     // })
-    return user.update(where, update).exec()
+    return User.update(where, update).exec()
 }
 
 exports.remove=function(where){

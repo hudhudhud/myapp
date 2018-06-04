@@ -1,7 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var fs=require("fs")
+var infoCode=require('../../public/js/infoCode')
 var article_bus=require('../../db/article_bus')
+var user_bus=require('../../db/user_bus')
+
+
+var redis = require("redis"),
+    client = redis.createClient()
+
+client.on("error", function (err) {
+    console.log("redis Error " + err);
+});
+
 
 
 router.get('/add',function(req, res, next) {
@@ -122,6 +133,67 @@ router.post('/api/:id',async function(req, res, next) {
 	catch(err){
 		res.json({err})
 		console.log(err)
+	}
+})
+
+router.get('/api/zan/:id/:sta',async function(req,res,next){
+	try{
+		
+		var session_id=req.header("session_id")
+		var user=client.get(session_id)
+		if(user){
+			var data=await article_bus.findById(req.params.id)
+			//var user=await user_bus.findById("5b14dd027bb1c364c34fd581")
+			var sta=parseInt(req.params.sta)
+			if(data&&user){
+				if(data.zanUserIds){
+					if(data.zanUserIds.indexOf(user._id)>-1){
+						if(!sta)data.zanUserIds.splice(data.zanUserIds.indexOf(user._id),1)
+					}
+					else{
+					  if(sta)data.zanUserIds.push(user._id)
+					}
+				}
+				else{
+					data.zanUserIds=[]
+					if(sta)data.zanUserIds.push(user._id)
+				}
+
+				if(user.zanArtIds){
+					if(user.zanArtIds.indexOf(req.params.id)>-1){
+						if(!sta)user.zanArtIds.splice(user.zanArtIds.indexOf(req.params.id),1)
+					}
+					else{
+						if(sta)user.zanArtIds.push(req.params.id)
+					}
+				}
+				else{
+					user.zanArtIds=[]
+					if(sta)user.zanArtIds.push(req.params.id)
+				}
+
+				var isSuccess1=await article_bus.update({"_id":req.params.id},{zanUserIds:data.zanUserIds})
+				var isSuccess2=await user_bus.update({"_id":user._id},{zanArtIds:user.zanArtIds})
+				if(isSuccess1&&isSuccess2){
+					console.log("点赞成功！")
+					res.json({success:"点赞成功！"})
+				}
+				else{
+					console.log("点赞失败！")
+					res.json({fail:"点赞失败！"})
+				}
+			}
+			else{
+				res.json({err:"用户或文章不存在"})
+			}
+		}
+		else{
+			res.json({errCode:"F0005",info:infoCode["F0005"]})
+		}
+	}
+	catch(e){
+		console.log("点赞失败！",e)
+		res.json({err:"操作失败："+e})
 	}
 })
 module.exports = router;
