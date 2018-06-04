@@ -143,7 +143,7 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 		var user=client.get(session_id)
 		if(user){
 			var data=await article_bus.findById(req.params.id)
-			//var user=await user_bus.findById("5b14dd027bb1c364c34fd581")
+			var user=await user_bus.findById(session_id)
 			var sta=parseInt(req.params.sta)
 			if(data&&user){
 				if(data.zanUserIds){
@@ -155,7 +155,7 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 					}
 				}
 				else{
-					data.zanUserIds=[];
+					data.zanUserIds=[]
 					if(sta)data.zanUserIds.push(user._id)
 				}
 
@@ -168,8 +168,7 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 					}
 				}
 				else{
-					user.zanArtIds=new Array();
-					console.log(222222,user,user.zanArtIds)
+					user.zanArtIds=[]
 					if(sta)user.zanArtIds.push(req.params.id)
 				}
 
