@@ -176,7 +176,7 @@ router.get('/api/zan/:id/:sta',async function(req,res,next){
 				var isSuccess2=await user_bus.update({"_id":user._id},{zanArtIds:user.zanArtIds})
 				if(isSuccess1&&isSuccess2){
 					console.log("点赞成功！")
-					res.json({success:"点赞成功！"})
+					res.json({success:"点赞成功！",zanUserIds:data.zanUserIds})
 				}
 				else{
 					console.log("点赞失败！")
