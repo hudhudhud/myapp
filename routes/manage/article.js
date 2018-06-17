@@ -159,6 +159,7 @@ router.get('/api/zan/:id/:sta', async function(req, res, next) {
 
 		var session_id = req.header("session_id")
 		var user = client.get(session_id)
+		console.log(3333333333333333333333333, "user:", user, "session_id=", session_id)
 		if (user) {
 			var data = await article_bus.findById(req.params.id)
 			var user = await user_bus.findById(session_id)
@@ -196,7 +197,6 @@ router.get('/api/zan/:id/:sta', async function(req, res, next) {
 				}, {
 					zanArtIds: user.zanArtIds
 				})
-				console.log(3333333333333333333333333, "user.id=" + user._id, "user:", user)
 				if (isSuccess1 && isSuccess2) {
 					console.log("点赞成功！")
 					res.json({
