@@ -196,7 +196,7 @@ router.get('/api/zan/:id/:sta', async function(req, res, next) {
 				}, {
 					zanArtIds: user.zanArtIds
 				})
-				console.log(user, user._id)
+				console.log(3333333333333333333333333, "user.id=" + user._id, "user:", user)
 				if (isSuccess1 && isSuccess2) {
 					console.log("点赞成功！")
 					res.json({
