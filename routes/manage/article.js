@@ -217,7 +217,7 @@ router.get('/api/zan/:id/:sta', async function(req, res, next) {
 		} else {
 			res.json({
 				errCode: "F0005",
-				info: infoCode["F0005"]
+				err: infoCode["F0005"]
 			})
 		}
 	} catch (e) {

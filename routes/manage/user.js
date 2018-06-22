@@ -158,7 +158,8 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
 						 //    }
 						 //    req.session.users[user._id] = user
 						    client.set(user._id+'',user,60*60)
-							res.json({msg,"session_id":user._id})
+							res.json({msg,"session_id":user._id,"nickName":user.nickName,"gender":user.gender,"birth":user.birth,
+								"city":user.city,"province":user.province,"country":user.country,"phone":user.phone,"avatarUrl":user.avatarUrl})
 							console.log("session_id=",user._id,"req.session=",req.session)
 						}
 						else{
@@ -181,6 +182,32 @@ router.get('/wx/loginByWxcode', (async function(req, res, next){
   	})
 }))
 
+router.post('/wx/updateUserTx',(async function(req,res,next){
+	var session_id = req.header("session_id")
+	var user = client.get(session_id)
+	console.log("修改头像","user:", user, "session_id=", session_id)
+	try{
+		if(user){
+			var success=user_bus.updateTx({"_id":session_id},req.body.url)
+			if(success){
+				res.json({msg:"更新成功！"})
+			}
+			else{
+				res.json({err:"更新头像失败！"})
+			}
+		}
+		else{
+			res.json({
+				errCode: "F0005",
+				err: infoCode["F0005"]
+			})
+		}
+	}
+	catch(e){
+		res.json({err:e})
+	}
+
+}))
 router.post('/wx/register', async function(req, res, next) {
 	var obj={name:req.body.name,pwd:req.body.pwd,birth:req.body.birth}
 	var md5 = crypto.createHash('md5');   //crypto模块功能是加密并生成各种散列,此处所示为MD5方式加密

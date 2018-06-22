@@ -52,6 +52,10 @@ exports.update=function(where,update) {
     return User.update(where, update).exec()
 }
 
+exports.updateTx=function(where,url) {
+    return User.update(where, {"avatarUrl":url}).exec()
+}
+
 exports.remove=function(where){
     //var wherestr = {'username' : 'Tracy McGrady'};
     return User.remove(where)

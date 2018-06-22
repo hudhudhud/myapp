@@ -6,6 +6,8 @@ var session = require('express-session')
 var logger = require('morgan');
 var RedisStore = require('connect-redis')(session);
 var mime = require('mime-types')
+var infoCode=require('./public/js/infoCode')
+
 
 var indexRouter = require('./routes/index');
 var registerRouter = require('./routes/register');
@@ -110,9 +112,7 @@ const storage = multer.diskStorage({
          callback(null, Date.now() + "." + ext);
     }
 })
-
 var upload = multer({storage})
-
 app.post('/upload', upload.array('artifile',8), function(req, res, next) {
   var obj=[]
   for (var i = 0; i <req.files.length; i++) {
@@ -121,6 +121,51 @@ app.post('/upload', upload.array('artifile',8), function(req, res, next) {
   }
   console.log(obj)
   res.json({files:obj})
+})
+
+
+var redis = require("redis"),
+    client = redis.createClient()
+
+client.on("error", function (err) {
+    console.log("redis Error " + err);
+})
+
+const storagewx = multer.diskStorage({
+  //上传图片的路径，是在你的静态目录下（public）uploads会自动进行创建
+    destination: path.join(__dirname,'./web/static/img/wx/upload'),
+  //给上传文件重命名，获取添加后缀名
+    filename: function(req, file, callback){
+         var ext=mime.extension(file.mimetype)
+         if(!ext)
+            ext="jpeg"
+         //var fileFormat = (file.originalname).split(".");
+         callback(null, Date.now() + "." + ext);
+    }
+})
+
+var uploadwx = multer({storagewx})
+app.post('/wx/upload', uploadwx.array('artifile',8), function(req, res, next){
+  console.log("微信头像上传")
+  var session_id=req.header("session_id")
+  var user=client.get(session_id)
+  if(user){
+      console.log(user)
+      var obj=[]
+      for (var i = 0; i <req.files.length; i++) {
+        console.log("file=",req.files[i])
+        obj.push({name:req.files[i].filename})
+      }
+      console.log(obj)
+      res.json({files:obj})
+  }
+  else{
+    res.json({
+        errCode: "F0005",
+        err: infoCode["F0005"]
+      })
+  }
+ 
 })
 
 //上传图片end
