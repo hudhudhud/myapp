@@ -7,9 +7,10 @@ var UserSchema = new Schema({
     gender:{type: Number},//值为1时是男性，值为2时是女性，值为0时是未知
     pwd: {type: String},                        //密码
     birth: {type: Date},    //生日
+    area:{type:String},    
     city: {type: String}, 
     province: {type: String}, 
-    country: {type: String},    
+    country: {type: String},
     phone: {type:String},
     avatarUrl:{type:String}, 
     tags:[Schema.Types.Mixed], //便签  
